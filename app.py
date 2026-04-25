@@ -104,11 +104,12 @@ def completion_delta(row):
         return "—"
 
 def ai_risk_summary(row):
-    prior = row["prior_tier"]
-    current = row["risk_tier"]
-    if prior != current:
-        return f"{row['school_name']} moved {prior} → {current}. {row['ai_summary']}"
-    return row["ai_summary"]
+    prior = str(row.get("prior_tier", "")).strip()
+    current = str(row.get("risk_tier", "")).strip()
+    summary = str(row.get("ai_summary", "")).strip()
+    if prior and current and prior != current and not summary.startswith(row["school_name"]):
+        return f"{row['school_name']} moved {prior} → {current}. {summary}"
+    return summary
 
 def anomaly_check(row):
     flags = []
@@ -121,10 +122,14 @@ def anomaly_check(row):
     return flags
 
 def gap_diagnostician(row):
-    if row["data_gap_note"] and str(row["data_gap_note"]).strip():
-        return str(row["data_gap_note"])
-    if row["freshness_days"] >= 21:
-        return f"School has not synced in {int(row['freshness_days'])} days. Milestones may be batch-entered. Suggest: prompt admin to enable auto-sync."
+    note = str(row.get("data_gap_note", "") or "")
+    if note.strip() and note.strip().lower() != "nan":
+        return note.strip()
+    try:
+        if float(row["freshness_days"]) >= 21:
+            return f"School has not synced in {int(float(row['freshness_days']))} days. Milestones may be batch-entered. Suggest: prompt admin to enable auto-sync."
+    except (ValueError, TypeError):
+        pass
     return None
 
 def recommend_tier(row):
@@ -281,8 +286,9 @@ with tab1:
                 st.markdown(f"**Days Since Active:** {cand['days_since_last_activity']}")
                 st.markdown(f"**Credit Band:** {cand['credit_band']}")
                 st.markdown(f"**Requested:** ${cand['requested_amount']:,}")
-                if str(cand["data_flag"]) != "None":
-                    st.markdown(f"**Flag:** ⚠️ {cand['data_flag']}")
+                flag = str(cand.get("data_flag", "") or "")
+                if flag.strip() and flag.strip().lower() not in ("none", "nan", ""):
+                    st.markdown(f"**Flag:** ⚠️ {flag.strip()}")
             decision = cand["recommended_decision"]
             badge = {"Approve": "🟢", "Review": "🟡", "Hold": "🔴"}.get(decision, "⚪")
             st.markdown(f"### {badge} Recommended: **{decision}**")
@@ -479,7 +485,9 @@ with tab5:
         if not flagged_cands.empty:
             st.dataframe(
                 flagged_cands[["candidate_name", "school_id", "program_stage", "credit_band",
-                               "requested_amount", "recommended_decision", "data_flag"]].rename(columns={
+                               "requested_amount", "recommended_decision", "data_flag"]]
+                .fillna("").replace("nan", "")
+                .rename(columns={
                     "candidate_name": "Candidate", "school_id": "School ID",
                     "program_stage": "Stage", "credit_band": "Credit",
                     "requested_amount": "Amount", "recommended_decision": "Decision",
