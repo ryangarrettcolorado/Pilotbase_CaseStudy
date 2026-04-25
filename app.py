@@ -60,6 +60,13 @@ st.markdown("""
 def load_data():
     s = pd.read_csv("schools.csv")
     c = pd.read_csv("candidates.csv")
+    numeric_school = ["completion_rate","prev_completion_rate","confidence_score","stalled_pct",
+                      "freshness_days","avg_attendance","withdrawal_rate","open_issues",
+                      "enrolled","active_milestones","certified","benchmark_completion",
+                      "benchmark_confidence","action_confidence"]
+    for col in numeric_school:
+        if col in s.columns:
+            s[col] = pd.to_numeric(s[col], errors="coerce")
     return s, c
 
 schools, candidates = load_data()
@@ -416,19 +423,22 @@ with tab5:
             rec_tier, rec_conf = recommend_tier(r)
             tier_color = {"Green": "#059669", "Watch": "#d97706", "Alert": "#dc2626"}.get(r["risk_tier"], "#6b7280")
             with st.container():
-                st.markdown(f"""
+                try:
+                    st.markdown(f"""
 <div class="action-row">
   <strong>{r['school_name']}</strong>
   &nbsp;<span style="color:{tier_color};font-weight:700">{r['risk_tier']}</span>
   &nbsp;·&nbsp; <span style="color:#6b7280;font-size:13px">{freshness_label(r['freshness_days'])} since update · {int(r['open_issues'])} open issues</span><br>
   <span style="font-size:13px;color:#374151">📌 Trigger: {r['action_trigger']}</span><br>
   <span style="font-size:13px;color:#0f1c2e">→ {r['action_recommendation']}</span>
-  &nbsp;<span style="font-size:12px;color:#00b4b4">AI confidence: {r['action_confidence']:.0%}</span>
+  &nbsp;<span style="font-size:12px;color:#00b4b4">AI confidence: {float(r['action_confidence']):.0%}</span>
 </div>
 """, unsafe_allow_html=True)
-                acol1, acol2 = st.columns([1, 5])
-                with acol1:
-                    st.button("Dismiss", key=f"dismiss_{r['school_id']}")
+                    acol1, acol2 = st.columns([1, 5])
+                    with acol1:
+                        st.button("Dismiss", key=f"dismiss_{r['school_id']}")
+                except Exception as e:
+                    st.warning(f"⚠️ Could not render action item for **{r.get('school_name', 'unknown school')}**: {e}")
 
         st.markdown("---")
         st.markdown("**All candidates requiring review across flagged schools:**")
