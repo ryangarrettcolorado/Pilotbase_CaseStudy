@@ -21,6 +21,7 @@ st.markdown("""
 .kpi-card {
     background: #ffffff; border-radius: 8px; padding: 18px 20px;
     box-shadow: 0 1px 4px rgba(0,0,0,0.08); text-align: center;
+    min-height: 110px; display: flex; flex-direction: column; justify-content: center;
 }
 .kpi-value { font-size: 36px; font-weight: 700; color: #0f1c2e; line-height: 1.1; }
 .kpi-label { font-size: 13px; color: #6b7280; margin-top: 4px; }
@@ -165,14 +166,14 @@ prev_avg_conf = schools["confidence_score"].mean() - 0.03
 
 kc1, kc2, kc3, kc4 = st.columns(4)
 with kc1:
-    st.markdown(f'<div class="kpi-card"><div class="kpi-value">{approved_n}</div><div class="kpi-label">Approved Schools</div></div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="kpi-card"><div class="kpi-value">{approved_n}</div><div class="kpi-label">Approved Schools</div><div class="kpi-delta">&nbsp;</div></div>', unsafe_allow_html=True)
 with kc2:
-    st.markdown(f'<div class="kpi-card"><div class="kpi-value">{watchlist_n} <span style="font-size:18px;color:#f59e0b">+{alert_n}</span></div><div class="kpi-label">Watch-list</div><div class="kpi-delta">↑ {alert_n} on Alert</div></div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="kpi-card"><div class="kpi-value">{watchlist_n}</div><div class="kpi-label">Watch-list</div><div class="kpi-delta">↑ {alert_n} on Alert</div></div>', unsafe_allow_html=True)
 with kc3:
-    st.markdown(f'<div class="kpi-card"><div class="kpi-value">{action_n} <span style="font-size:13px;color:#00b4b4;font-weight:600">AI prioritized</span></div><div class="kpi-label">Action Items</div></div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="kpi-card"><div class="kpi-value">{action_n}</div><div class="kpi-label">Action Items</div><div class="kpi-delta">AI prioritized</div></div>', unsafe_allow_html=True)
 with kc4:
     delta_conf = avg_conf - prev_avg_conf
-    st.markdown(f'<div class="kpi-card"><div class="kpi-value">{avg_conf:.0%} <span style="font-size:16px;color:#00b4b4">+{delta_conf:.0%}</span></div><div class="kpi-label">Avg Confidence</div></div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="kpi-card"><div class="kpi-value">{avg_conf:.0%}</div><div class="kpi-label">Avg Confidence</div><div class="kpi-delta">+{delta_conf:.0%} vs prior</div></div>', unsafe_allow_html=True)
 
 st.markdown("<div style='height:16px'></div>", unsafe_allow_html=True)
 
