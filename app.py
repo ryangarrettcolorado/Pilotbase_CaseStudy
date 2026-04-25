@@ -7,10 +7,26 @@ st.set_page_config(page_title="TradeCraft Lender Portal", layout="wide")
 
 st.markdown("""
 <style>
-[data-testid="stAppViewContainer"] { background: #f5f7fa; }
-[data-testid="stSidebar"] { background: #0f1c2e; }
-[data-testid="stSidebar"] * { color: #ffffff !important; }
-[data-testid="stSidebar"] .stSelectbox label { color: #00b4b4 !important; }
+/* ── Sidebar shell ─────────────────────────────── */
+[data-testid="stSidebar"] { background: #0f1c2e !important; }
+[data-testid="stSidebar"] h1,
+[data-testid="stSidebar"] h2,
+[data-testid="stSidebar"] h3,
+[data-testid="stSidebar"] p,
+[data-testid="stSidebar"] span:not([data-baseweb]),
+[data-testid="stSidebar"] label { color: #cbd5e1 !important; }
+[data-testid="stSidebar"] .stSelectbox > label { color: #00b4b4 !important; font-weight: 600; }
+/* Selectbox input — keep native system colors so value is visible in both modes */
+[data-testid="stSidebar"] [data-baseweb="select"] > div {
+    background: #1e3050 !important;
+    border-color: #334d6e !important;
+}
+[data-testid="stSidebar"] [data-baseweb="select"] [data-testid="stMarkdownContainer"],
+[data-testid="stSidebar"] [data-baseweb="select"] span,
+[data-testid="stSidebar"] [data-baseweb="select"] div {
+    color: #f1f5f9 !important;
+}
+/* ── Portal header ─────────────────────────────── */
 .portal-header {
     background: #0f1c2e; padding: 14px 24px; border-radius: 8px;
     display: flex; align-items: center; justify-content: space-between;
@@ -18,19 +34,36 @@ st.markdown("""
 }
 .portal-title { color: #ffffff; font-size: 20px; font-weight: 700; margin: 0; }
 .portal-tabs { color: #00b4b4; font-size: 14px; }
+/* ── KPI cards — adaptive ──────────────────────── */
 .kpi-card {
-    background: #ffffff; border-radius: 8px; padding: 18px 20px;
+    background: var(--kpi-bg, #ffffff);
+    border: 1px solid var(--kpi-border, #e5e7eb);
+    border-radius: 8px; padding: 18px 20px;
     box-shadow: 0 1px 4px rgba(0,0,0,0.08); text-align: center;
     min-height: 110px; display: flex; flex-direction: column; justify-content: center;
 }
-.kpi-value { font-size: 36px; font-weight: 700; color: #0f1c2e; line-height: 1.1; }
+.kpi-value { font-size: 36px; font-weight: 700; color: var(--kpi-val, #0f1c2e); line-height: 1.1; }
 .kpi-label { font-size: 13px; color: #6b7280; margin-top: 4px; }
 .kpi-delta { font-size: 12px; color: #00b4b4; font-weight: 600; }
-.pill-green { background:#d1fae5; color:#065f46; border-radius:12px; padding:3px 12px; font-size:12px; font-weight:700; }
-.pill-watch { background:#fef3c7; color:#92400e; border-radius:12px; padding:3px 12px; font-size:12px; font-weight:700; }
-.pill-alert { background:#fee2e2; color:#991b1b; border-radius:12px; padding:3px 12px; font-size:12px; font-weight:700; }
+/* Light mode overrides */
+@media (prefers-color-scheme: light) {
+    :root { --kpi-bg: #ffffff; --kpi-border: #e5e7eb; --kpi-val: #0f1c2e; }
+}
+/* Dark mode overrides */
+@media (prefers-color-scheme: dark) {
+    :root { --kpi-bg: #1e293b; --kpi-border: #334155; --kpi-val: #f1f5f9; }
+    .kpi-label { color: #94a3b8; }
+    .section-header { color: #e2e8f0 !important; }
+    .action-row { background: #1e293b !important; border-left-color: #00b4b4; }
+    .action-row span, .action-row strong { color: #e2e8f0 !important; }
+}
+/* ── Pills — always high-contrast ─────────────── */
+.pill-green { background:#d1fae5; color:#065f46; border-radius:12px; padding:3px 12px; font-size:12px; font-weight:700; display:inline-block; }
+.pill-watch { background:#fef3c7; color:#92400e; border-radius:12px; padding:3px 12px; font-size:12px; font-weight:700; display:inline-block; }
+.pill-alert { background:#fee2e2; color:#991b1b; border-radius:12px; padding:3px 12px; font-size:12px; font-weight:700; display:inline-block; }
+/* ── Action queue ──────────────────────────────── */
 .action-queue-bar {
-    background: #0d9488; color: white; padding: 12px 18px;
+    background: #0d9488; color: #ffffff; padding: 12px 18px;
     border-radius: 8px; font-weight: 600; font-size: 14px; margin: 12px 0 6px 0;
 }
 .action-row {
@@ -38,6 +71,7 @@ st.markdown("""
     margin-bottom: 8px; border-left: 4px solid #0f1c2e;
     box-shadow: 0 1px 3px rgba(0,0,0,0.06);
 }
+/* ── Info boxes — adaptive ─────────────────────── */
 .section-header { color: #0f1c2e; font-size: 18px; font-weight: 700; margin: 20px 0 10px 0; }
 .ai-box {
     background: #f0fdfa; border-left: 4px solid #00b4b4;
@@ -51,8 +85,14 @@ st.markdown("""
     background: #fef2f2; border-left: 4px solid #ef4444;
     padding: 12px 16px; border-radius: 6px; font-size: 14px; color: #7f1d1d;
 }
+@media (prefers-color-scheme: dark) {
+    .ai-box   { background: #0d2e2b; color: #6ee7de; }
+    .warn-box { background: #2d1f00; color: #fcd34d; }
+    .alert-box{ background: #2d0a0a; color: #fca5a5; }
+}
+/* ── Tabs ──────────────────────────────────────── */
 .stTabs [data-baseweb="tab-list"] { gap: 4px; background: #0f1c2e; padding: 6px 8px; border-radius: 8px; }
-.stTabs [data-baseweb="tab"] { color: #94a3b8; background: transparent; border-radius: 6px; padding: 6px 16px; font-size: 14px; }
+.stTabs [data-baseweb="tab"] { color: #94a3b8 !important; background: transparent; border-radius: 6px; padding: 6px 16px; font-size: 14px; }
 .stTabs [aria-selected="true"] { background: #00b4b4 !important; color: #ffffff !important; }
 </style>
 """, unsafe_allow_html=True)
@@ -150,7 +190,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-st.sidebar.markdown("## Filters")
+st.sidebar.markdown('<p style="color:#00b4b4;font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px">Filters</p>', unsafe_allow_html=True)
 regions = ["All"] + sorted(schools["region"].unique().tolist())
 region = st.sidebar.selectbox("Region", regions)
 tiers = ["All", "Green", "Watch", "Alert"]
