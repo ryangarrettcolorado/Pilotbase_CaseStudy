@@ -72,10 +72,21 @@ def load_data():
 schools, candidates = load_data()
 
 def freshness_label(days):
+    try:
+        days = float(days)
+    except (ValueError, TypeError):
+        return "unknown"
     if days == 0: return "today"
-    if days == 1: return "1 day"
-    if days < 1: return "< 1 day"
+    if days <= 1: return "1 day"
     return f"{int(days)} days"
+
+def safe_pct(val, fallback="—"):
+    try:
+        v = float(val)
+        if v != v: return fallback  # nan check
+        return f"{v:.0%}"
+    except (ValueError, TypeError):
+        return fallback
 
 def tier_pill(tier):
     if tier == "Green": return '<span class="pill-green">Green</span>'
@@ -338,23 +349,32 @@ with tab3:
     if not tier_changes.empty:
         st.markdown("#### Tier Changes")
         for _, r in tier_changes.iterrows():
-            direction = "↑" if r["risk_tier"] == "Green" else "↓"
-            box = "ai-box" if r["risk_tier"] == "Green" else "alert-box" if r["risk_tier"] == "Alert" else "warn-box"
-            st.markdown(f'<div class="{box}">{direction} <strong>{r["school_name"]}</strong>: {r["prior_tier"]} → {r["risk_tier"]} — {r["ai_summary"]}</div>', unsafe_allow_html=True)
+            try:
+                direction = "↑" if r["risk_tier"] == "Green" else "↓"
+                box = "ai-box" if r["risk_tier"] == "Green" else "alert-box" if r["risk_tier"] == "Alert" else "warn-box"
+                st.markdown(f'<div class="{box}">{direction} <strong>{r["school_name"]}</strong>: {r["prior_tier"]} → {r["risk_tier"]} — {r["ai_summary"]}</div>', unsafe_allow_html=True)
+            except Exception as e:
+                st.warning(f"⚠️ Could not render tier change for **{r.get('school_name', 'unknown')}**: {e}")
 
     if not silent.empty:
         st.markdown("#### Silent Schools")
         for _, r in silent.iterrows():
-            gap = gap_diagnostician(r)
-            msg = gap if gap else f"{r['school_name']} has not reported in {int(r['freshness_days'])} days."
-            st.markdown(f'<div class="warn-box">🔇 <strong>{r["school_name"]}</strong> ({int(r["freshness_days"])} days): {msg}</div>', unsafe_allow_html=True)
+            try:
+                gap = gap_diagnostician(r)
+                msg = gap if gap else f"{r['school_name']} has not reported in {int(r['freshness_days'])} days."
+                st.markdown(f'<div class="warn-box">🔇 <strong>{r["school_name"]}</strong> ({int(r["freshness_days"])} days): {msg}</div>', unsafe_allow_html=True)
+            except Exception as e:
+                st.warning(f"⚠️ Could not render silent school row for **{r.get('school_name', 'unknown')}**: {e}")
 
     declining = schools[schools["completion_rate"] < schools["prev_completion_rate"]].copy()
     if not declining.empty:
         st.markdown("#### Declining Completion")
         for _, r in declining.iterrows():
-            delta = r["completion_rate"] - r["prev_completion_rate"]
-            st.markdown(f'<div class="warn-box">📉 <strong>{r["school_name"]}</strong>: completion {r["prev_completion_rate"]:.0%} → {r["completion_rate"]:.0%} ({delta:+.0%})</div>', unsafe_allow_html=True)
+            try:
+                delta = r["completion_rate"] - r["prev_completion_rate"]
+                st.markdown(f'<div class="warn-box">📉 <strong>{r["school_name"]}</strong>: completion {r["prev_completion_rate"]:.0%} → {r["completion_rate"]:.0%} ({delta:+.0%})</div>', unsafe_allow_html=True)
+            except Exception as e:
+                st.warning(f"⚠️ Could not render completion row for **{r.get('school_name', 'unknown')}**: {e}")
 
 with tab4:
     st.markdown('<div class="section-header">Benchmark View</div>', unsafe_allow_html=True)
@@ -381,32 +401,39 @@ with tab4:
             return "color:#6b7280"
         except: return ""
 
-    st.dataframe(
-        bench_df.style
-            .map(color_vs, subset=["vs Median (Completion)", "vs Median (Confidence)"])
-            .format({"Completion": "{:.0%}", "Confidence": "{:.0%}",
-                     "vs Median (Completion)": "{:+.0%}", "vs Median (Confidence)": "{:+.0%}"}),
-        use_container_width=True, hide_index=True
-    )
+    try:
+        st.dataframe(
+            bench_df.style
+                .map(color_vs, subset=["vs Median (Completion)", "vs Median (Confidence)"])
+                .format({"Completion": "{:.0%}", "Confidence": "{:.0%}",
+                         "vs Median (Completion)": "{:+.0%}", "vs Median (Confidence)": "{:+.0%}"}),
+            use_container_width=True, hide_index=True
+        )
+    except Exception as e:
+        st.warning(f"⚠️ Could not render benchmark table: {e}")
+        st.dataframe(bench_df, use_container_width=True, hide_index=True)
 
     bc1, bc2 = st.columns(2)
     bc1.metric("Portfolio Median Completion", f"{median_completion:.0%}")
     bc2.metric("Portfolio Median Confidence", f"{median_confidence:.0%}")
 
-    fig_bench = px.scatter(
-        schools, x="completion_rate", y="confidence_score",
-        color="risk_tier", hover_name="school_name",
-        color_discrete_map={"Green": "#00b4b4", "Watch": "#f59e0b", "Alert": "#ef4444"},
-        labels={"completion_rate": "Completion Rate", "confidence_score": "Confidence Score", "risk_tier": "Tier"},
-        height=350
-    )
-    fig_bench.add_vline(x=median_completion, line_dash="dash", line_color="#94a3b8",
-                        annotation_text="Median Completion", annotation_position="top right")
-    fig_bench.add_hline(y=median_confidence, line_dash="dash", line_color="#94a3b8",
-                        annotation_text="Median Confidence", annotation_position="top right")
-    fig_bench.update_traces(marker=dict(size=11))
-    fig_bench.update_layout(margin=dict(t=20, b=20), paper_bgcolor="#f5f7fa", plot_bgcolor="#f5f7fa")
-    st.plotly_chart(fig_bench, use_container_width=True)
+    try:
+        fig_bench = px.scatter(
+            schools, x="completion_rate", y="confidence_score",
+            color="risk_tier", hover_name="school_name",
+            color_discrete_map={"Green": "#00b4b4", "Watch": "#f59e0b", "Alert": "#ef4444"},
+            labels={"completion_rate": "Completion Rate", "confidence_score": "Confidence Score", "risk_tier": "Tier"},
+            height=350
+        )
+        fig_bench.add_vline(x=median_completion, line_dash="dash", line_color="#94a3b8",
+                            annotation_text="Median Completion", annotation_position="top right")
+        fig_bench.add_hline(y=median_confidence, line_dash="dash", line_color="#94a3b8",
+                            annotation_text="Median Confidence", annotation_position="top right")
+        fig_bench.update_traces(marker=dict(size=11))
+        fig_bench.update_layout(margin=dict(t=20, b=20), paper_bgcolor="#f5f7fa", plot_bgcolor="#f5f7fa")
+        st.plotly_chart(fig_bench, use_container_width=True)
+    except Exception as e:
+        st.warning(f"⚠️ Could not render benchmark chart: {e}")
 
 with tab5:
     st.markdown('<div class="section-header">Action Queue</div>', unsafe_allow_html=True)
@@ -431,7 +458,7 @@ with tab5:
   &nbsp;·&nbsp; <span style="color:#6b7280;font-size:13px">{freshness_label(r['freshness_days'])} since update · {int(r['open_issues'])} open issues</span><br>
   <span style="font-size:13px;color:#374151">📌 Trigger: {r['action_trigger']}</span><br>
   <span style="font-size:13px;color:#0f1c2e">→ {r['action_recommendation']}</span>
-  &nbsp;<span style="font-size:12px;color:#00b4b4">AI confidence: {float(r['action_confidence']):.0%}</span>
+  &nbsp;<span style="font-size:12px;color:#00b4b4">AI confidence: {safe_pct(r['action_confidence'])}</span>
 </div>
 """, unsafe_allow_html=True)
                     acol1, acol2 = st.columns([1, 5])
