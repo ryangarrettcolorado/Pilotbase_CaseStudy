@@ -194,8 +194,8 @@ with tab1:
         return ""
 
     styled = (df_table.style
-              .applymap(color_tier_col, subset=["Tier", "AI Recommends"])
-              .applymap(color_delta, subset=["Δ"]))
+              .map(color_tier_col, subset=["Tier", "AI Recommends"])
+              .map(color_delta, subset=["Δ"]))
     st.dataframe(styled, use_container_width=True, hide_index=True)
 
     st.markdown('<div class="section-header">School Detail</div>', unsafe_allow_html=True)
@@ -310,7 +310,7 @@ with tab2:
 
     st.dataframe(
         funnel_df.style
-            .applymap(color_rate, subset=["Enroll→Active", "Active→Cert"])
+            .map(color_rate, subset=["Enroll→Active", "Active→Cert"])
             .format({"Enroll→Active": "{:.0%}", "Active→Cert": "{:.0%}"}),
         use_container_width=True, hide_index=True
     )
@@ -376,7 +376,7 @@ with tab4:
 
     st.dataframe(
         bench_df.style
-            .applymap(color_vs, subset=["vs Median (Completion)", "vs Median (Confidence)"])
+            .map(color_vs, subset=["vs Median (Completion)", "vs Median (Confidence)"])
             .format({"Completion": "{:.0%}", "Confidence": "{:.0%}",
                      "vs Median (Completion)": "{:+.0%}", "vs Median (Confidence)": "{:+.0%}"}),
         use_container_width=True, hide_index=True
