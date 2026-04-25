@@ -95,9 +95,13 @@ def tier_pill(tier):
     return '<span class="pill-alert">Alert</span>'
 
 def completion_delta(row):
-    d = row["completion_rate"] - row["prev_completion_rate"]
-    sign = "+" if d >= 0 else ""
-    return f"{sign}{d:.0%}"
+    try:
+        d = float(row["completion_rate"]) - float(row["prev_completion_rate"])
+        if d != d: return "—"
+        sign = "+" if d >= 0 else ""
+        return f"{sign}{d:.0%}"
+    except (ValueError, TypeError):
+        return "—"
 
 def ai_risk_summary(row):
     prior = row["prior_tier"]
@@ -190,9 +194,9 @@ with tab1:
         table_rows.append({
             "School": row["school_name"],
             "Region": row["region"],
-            "Completion": f"{row['completion_rate']:.0%}",
+            "Completion": safe_pct(row['completion_rate']),
             "Δ": completion_delta(row),
-            "Confidence": f"{row['confidence_score']:.0%}",
+            "Confidence": safe_pct(row['confidence_score']),
             "Updated": freshness_label(row["freshness_days"]),
             "Tier": row["risk_tier"],
             "Status": row["lender_status"],
@@ -230,12 +234,12 @@ with tab1:
             st.markdown(f"**Status:** {row['lender_status']}")
             st.markdown(f"**Risk Tier:** {row['risk_tier']}")
         with col2:
-            st.markdown(f"**Completion:** {row['completion_rate']:.0%} ({completion_delta(row)} vs prior)")
-            st.markdown(f"**Confidence:** {row['confidence_score']:.0%}")
-            st.markdown(f"**Attendance:** {row['avg_attendance']:.0%}")
-            st.markdown(f"**Withdrawal:** {row['withdrawal_rate']:.0%}")
+            st.markdown(f"**Completion:** {safe_pct(row['completion_rate'])} ({completion_delta(row)} vs prior)")
+            st.markdown(f"**Confidence:** {safe_pct(row['confidence_score'])}")
+            st.markdown(f"**Attendance:** {safe_pct(row['avg_attendance'])}")
+            st.markdown(f"**Withdrawal:** {safe_pct(row['withdrawal_rate'])}")
         with col3:
-            st.markdown(f"**Stalled:** {row['stalled_pct']:.0%}")
+            st.markdown(f"**Stalled:** {safe_pct(row['stalled_pct'])}")
             st.markdown(f"**Data Age:** {freshness_label(row['freshness_days'])}")
             st.markdown(f"**Open Issues:** {int(row['open_issues'])}")
 
