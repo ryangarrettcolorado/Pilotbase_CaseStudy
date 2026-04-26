@@ -283,9 +283,26 @@ p, li, label, div, span {
     font-size: 14px;
     font-weight: 600;
 }
-.stTabs [aria-selected="true"] {
-    background: linear-gradient(90deg, var(--brand-orange) 0%, var(--brand-teal) 100%) !important;
-    color: #fcfbf8 !important;
+.stTabs [data-baseweb="tab-highlight"] {
+    background: transparent !important;
+}
+.stTabs button[role="tab"] {
+    background: transparent !important;
+    color: var(--text-muted) !important;
+    border-radius: 10px !important;
+    transition: background-color 0.18s ease, color 0.18s ease;
+}
+.stTabs button[role="tab"] p {
+    color: inherit !important;
+}
+.stTabs button[role="tab"][aria-selected="true"] {
+    background: var(--brand-orange) !important;
+    color: var(--tab-selected-text) !important;
+}
+.stTabs button[role="tab"][aria-selected="true"] p,
+.stTabs button[role="tab"][aria-selected="true"] span,
+.stTabs button[role="tab"][aria-selected="true"] div {
+    color: var(--tab-selected-text) !important;
 }
 
 [data-testid="stDataFrame"], [data-testid="stTable"] {
