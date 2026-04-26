@@ -38,30 +38,31 @@ st.set_page_config(page_title="TradeCraft Lender Portal", layout="wide")
 st.markdown("""
 <style>
 :root {
-    --bg: #f5f3ef;
-    --surface: #fcfbf8;
-    --surface-alt: #2a2a2a;
-    --surface-muted: #262626;
-    --text: #f3efe7;
-    --text-strong: #fff9f0;
-    --text-muted: #c9c1b5;
-    --border: #4a433b;
-    --border-strong: #6a6157;
-    --shadow-sm: 0 1px 2px rgba(15, 17, 21, 0.06);
-    --shadow-md: 0 8px 24px rgba(15, 17, 21, 0.08);
+    --bg: #f6f1e8;
+    --surface: #fffaf2;
+    --surface-alt: #f1e8dc;
+    --surface-muted: #ebe0d2;
+    --text: #322b26;
+    --text-strong: #181513;
+    --text-muted: #7b6f64;
+    --border: #d8cabb;
+    --border-strong: #c1ae9a;
+    --shadow-sm: 0 1px 2px rgba(24, 21, 19, 0.05);
+    --shadow-md: 0 10px 28px rgba(24, 21, 19, 0.08);
     --brand-black: #1a1a1a;
-    --brand-gray: #222222;
-    --brand-gray-2: #2b2b2b;
-    --brand-orange: #ff7a2f;
-    --brand-orange-soft: #3a2418;
-    --brand-teal: #09f0ff;
-    --brand-teal-soft: #102b2d;
-    --success-bg: #203228;
-    --success-text: #7cf0af;
-    --watch-bg: #3b2b12;
-    --watch-text: #ffbf66;
-    --alert-bg: #3a1d1d;
-    --alert-text: #ff8a8a;
+    --brand-gray: #ece2d6;
+    --brand-gray-2: #e4d8c9;
+    --brand-orange: #ed6b2e;
+    --brand-orange-soft: #fff0e5;
+    --brand-teal: #12dfe1;
+    --brand-teal-soft: #e8fbfb;
+    --success-bg: #eaf8ef;
+    --success-text: #20724e;
+    --watch-bg: #fff4e7;
+    --watch-text: #a85d1d;
+    --alert-bg: #fdeeee;
+    --alert-text: #b34747;
+    --tab-selected-text: #181513;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -88,6 +89,7 @@ st.markdown("""
         --watch-text: #ffbf66;
         --alert-bg: rgba(255, 138, 138, 0.16);
         --alert-text: #ff8a8a;
+        --tab-selected-text: #fff9f0;
     }
 }
 
@@ -113,7 +115,7 @@ p, li, label, div, span {
 }
 
 [data-testid="stSidebar"] {
-    background: linear-gradient(180deg, #1a1a1a 0%, #1a1e25 100%) !important;
+    background: linear-gradient(180deg, #1a1a1a 0%, #232323 100%) !important;
     border-right: 1px solid rgba(255,255,255,0.08);
 }
 [data-testid="stSidebar"] h1,
@@ -144,8 +146,8 @@ p, li, label, div, span {
 }
 
 .portal-header {
-    background: linear-gradient(135deg, #1a1a1a 0%, #252525 100%);
-    border: 1px solid rgba(255,255,255,0.08);
+    background: linear-gradient(135deg, var(--surface) 0%, var(--surface-alt) 100%);
+    border: 1px solid var(--border);
     padding: 18px 24px;
     border-radius: 16px;
     display: flex;
@@ -155,14 +157,14 @@ p, li, label, div, span {
     box-shadow: var(--shadow-md);
 }
 .portal-title {
-    color: #f8fafc;
+    color: var(--text-strong);
     font-size: 1.15rem;
     font-weight: 800;
     letter-spacing: -0.02em;
     margin: 0;
 }
 .portal-tabs {
-    color: #09f0ff;
+    color: var(--brand-teal);
     font-size: 0.85rem;
     font-weight: 600;
 }
@@ -243,14 +245,14 @@ p, li, label, div, span {
 }
 
 .action-queue-bar {
-    background: linear-gradient(90deg, var(--brand-gray) 0%, var(--brand-gray-2) 70%);
-    color: #f8fafc;
+    background: linear-gradient(90deg, var(--surface-alt) 0%, var(--surface-muted) 70%);
+    color: var(--text-strong);
     padding: 13px 18px;
     border-radius: 14px;
     font-weight: 700;
     font-size: 14px;
     margin: 12px 0 10px 0;
-    border: 1px solid rgba(255,255,255,0.08);
+    border: 1px solid var(--border);
 }
 .action-row {
     background: var(--surface);
@@ -268,13 +270,13 @@ p, li, label, div, span {
 
 .stTabs [data-baseweb="tab-list"] {
     gap: 6px;
-    background: var(--brand-black);
+    background: var(--surface-alt);
     padding: 7px 8px;
     border-radius: 14px;
-    border: 1px solid rgba(255,255,255,0.08);
+    border: 1px solid var(--border);
 }
 .stTabs [data-baseweb="tab"] {
-    color: #c8beb2 !important;
+    color: var(--text-muted) !important;
     background: transparent;
     border-radius: 10px;
     padding: 8px 16px;
@@ -379,8 +381,8 @@ def plotly_theme(dark=False):
         font=dict(color="#222222"),
         title_font=dict(color="#fff9f0"),
         legend=dict(font=dict(color="#222222"), bgcolor="rgba(0,0,0,0)"),
-        xaxis=dict(gridcolor="rgba(95,103,115,0.14)", zerolinecolor="rgba(95,103,115,0.14)", linecolor="rgba(95,103,115,0.24)", tickfont=dict(color="#4b5563"), title_font=dict(color="#4b5563")),
-        yaxis=dict(gridcolor="rgba(95,103,115,0.14)", zerolinecolor="rgba(95,103,115,0.14)", linecolor="rgba(95,103,115,0.24)", tickfont=dict(color="#4b5563"), title_font=dict(color="#4b5563")),
+        xaxis=dict(gridcolor="rgba(123,111,100,0.14)", zerolinecolor="rgba(123,111,100,0.14)", linecolor="rgba(193,174,154,0.5)", tickfont=dict(color="#7b6f64"), title_font=dict(color="#7b6f64")),
+        yaxis=dict(gridcolor="rgba(123,111,100,0.14)", zerolinecolor="rgba(123,111,100,0.14)", linecolor="rgba(193,174,154,0.5)", tickfont=dict(color="#7b6f64"), title_font=dict(color="#7b6f64")),
     )
 
 PLOTLY_LIGHT = plotly_theme(dark=False)
