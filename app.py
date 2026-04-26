@@ -38,56 +38,56 @@ st.set_page_config(page_title="TradeCraft Lender Portal", layout="wide")
 st.markdown("""
 <style>
 :root {
-    --bg: #f7f7f8;
-    --surface: #ffffff;
-    --surface-alt: #f2f4f5;
-    --surface-muted: #eceff1;
-    --text: #161616;
-    --text-strong: #0f1115;
-    --text-muted: #5f6773;
-    --border: #d7dce2;
-    --border-strong: #b9c2cc;
+    --bg: #f5f3ef;
+    --surface: #fcfbf8;
+    --surface-alt: #2a2a2a;
+    --surface-muted: #262626;
+    --text: #f3efe7;
+    --text-strong: #fff9f0;
+    --text-muted: #c9c1b5;
+    --border: #4a433b;
+    --border-strong: #6a6157;
     --shadow-sm: 0 1px 2px rgba(15, 17, 21, 0.06);
     --shadow-md: 0 8px 24px rgba(15, 17, 21, 0.08);
-    --brand-black: #0d0f12;
-    --brand-gray: #20242b;
-    --brand-gray-2: #2b313a;
-    --brand-orange: #f97316;
-    --brand-orange-soft: #fff1e8;
-    --brand-teal: #0f9d94;
-    --brand-teal-soft: #e8f7f5;
-    --success-bg: #e8f7ef;
-    --success-text: #0f6a46;
-    --watch-bg: #fff3df;
-    --watch-text: #a85a00;
-    --alert-bg: #fdecec;
-    --alert-text: #a02828;
+    --brand-black: #1a1a1a;
+    --brand-gray: #222222;
+    --brand-gray-2: #2b2b2b;
+    --brand-orange: #ff7a2f;
+    --brand-orange-soft: #3a2418;
+    --brand-teal: #09f0ff;
+    --brand-teal-soft: #102b2d;
+    --success-bg: #203228;
+    --success-text: #7cf0af;
+    --watch-bg: #3b2b12;
+    --watch-text: #ffbf66;
+    --alert-bg: #3a1d1d;
+    --alert-text: #ff8a8a;
 }
 
 @media (prefers-color-scheme: dark) {
     :root {
-        --bg: #0d0f12;
-        --surface: #171a1f;
-        --surface-alt: #1f242b;
-        --surface-muted: #252b34;
-        --text: #e8ecf1;
-        --text-strong: #f6f8fb;
-        --text-muted: #a7b0bc;
-        --border: #313844;
-        --border-strong: #485261;
+        --bg: #1a1a1a;
+        --surface: #212121;
+        --surface-alt: #252525;
+        --surface-muted: #2f2f2f;
+        --text: #f3efe7;
+        --text-strong: #fff9f0;
+        --text-muted: #c9c1b5;
+        --border: #4a433b;
+        --border-strong: #6a6157;
         --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.28);
         --shadow-md: 0 14px 34px rgba(0, 0, 0, 0.32);
         --brand-black: #050607;
-        --brand-gray: #171a1f;
-        --brand-gray-2: #252b34;
-        --brand-orange-soft: rgba(249, 115, 22, 0.14);
-        --brand-teal-soft: rgba(15, 157, 148, 0.14);
-        --success-bg: rgba(16, 185, 129, 0.16);
-        --success-text: #82e6ba;
-        --watch-bg: rgba(249, 115, 22, 0.18);
-        --watch-text: #ffbe7a;
-        --alert-bg: rgba(239, 68, 68, 0.16);
-        --alert-text: #ffb2b2;
+        --brand-gray: #212121;
+        --brand-gray-2: #2f2f2f;
+        --brand-orange-soft: rgba(255, 122, 47, 0.16);
+        --brand-teal-soft: rgba(9, 240, 255, 0.16);
+        --success-bg: rgba(124, 240, 175, 0.16);
+        --success-text: #7cf0af;
+        --watch-bg: rgba(255, 122, 47, 0.18);
+        --watch-text: #ffbf66;
+        --alert-bg: rgba(255, 138, 138, 0.16);
+        --alert-text: #ff8a8a;
     }
 }
 
@@ -113,8 +113,8 @@ p, li, label, div, span {
 }
 
 [data-testid="stSidebar"] {
-    background: linear-gradient(180deg, #0d0f12 0%, #1a1e25 100%) !important;
-    border-right: 1px solid rgba(255,255,255,0.06);
+    background: linear-gradient(180deg, #1a1a1a 0%, #1a1e25 100%) !important;
+    border-right: 1px solid rgba(255,255,255,0.08);
 }
 [data-testid="stSidebar"] h1,
 [data-testid="stSidebar"] h2,
@@ -122,30 +122,30 @@ p, li, label, div, span {
 [data-testid="stSidebar"] p,
 [data-testid="stSidebar"] span:not([data-baseweb]),
 [data-testid="stSidebar"] label {
-    color: #d5dde7 !important;
+    color: #f1ece2 !important;
 }
 [data-testid="stSidebar"] .stSelectbox > label {
-    color: #7ce0d7 !important;
+    color: #09f0ff !important;
     font-weight: 700;
     letter-spacing: 0.04em;
     text-transform: uppercase;
     font-size: 0.76rem;
 }
 [data-testid="stSidebar"] [data-baseweb="select"] > div {
-    background: #232933 !important;
-    border: 1px solid #39414f !important;
+    background: #2b2b2b !important;
+    border: 1px solid #5a5249 !important;
     border-radius: 12px !important;
     min-height: 44px;
 }
 [data-testid="stSidebar"] [data-baseweb="select"] [data-testid="stMarkdownContainer"],
 [data-testid="stSidebar"] [data-baseweb="select"] span,
 [data-testid="stSidebar"] [data-baseweb="select"] div {
-    color: #f6f8fb !important;
+    color: #fff9f0 !important;
 }
 
 .portal-header {
-    background: linear-gradient(135deg, #0d0f12 0%, #1f242b 100%);
-    border: 1px solid rgba(255,255,255,0.06);
+    background: linear-gradient(135deg, #1a1a1a 0%, #252525 100%);
+    border: 1px solid rgba(255,255,255,0.08);
     padding: 18px 24px;
     border-radius: 16px;
     display: flex;
@@ -162,7 +162,7 @@ p, li, label, div, span {
     margin: 0;
 }
 .portal-tabs {
-    color: #8ee5dc;
+    color: #09f0ff;
     font-size: 0.85rem;
     font-weight: 600;
 }
@@ -238,7 +238,7 @@ p, li, label, div, span {
 }
 .alert-box {
     background: var(--alert-bg);
-    border-left: 4px solid #ef4444;
+    border-left: 4px solid #ff6b6b;
     color: var(--text-strong);
 }
 
@@ -250,7 +250,7 @@ p, li, label, div, span {
     font-weight: 700;
     font-size: 14px;
     margin: 12px 0 10px 0;
-    border: 1px solid rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
 }
 .action-row {
     background: var(--surface);
@@ -271,10 +271,10 @@ p, li, label, div, span {
     background: var(--brand-black);
     padding: 7px 8px;
     border-radius: 14px;
-    border: 1px solid rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
 }
 .stTabs [data-baseweb="tab"] {
-    color: #9aa5b1 !important;
+    color: #c8beb2 !important;
     background: transparent;
     border-radius: 10px;
     padding: 8px 16px;
@@ -283,7 +283,7 @@ p, li, label, div, span {
 }
 .stTabs [aria-selected="true"] {
     background: linear-gradient(90deg, var(--brand-orange) 0%, var(--brand-teal) 100%) !important;
-    color: #ffffff !important;
+    color: #fcfbf8 !important;
 }
 
 [data-testid="stDataFrame"], [data-testid="stTable"] {
@@ -367,28 +367,28 @@ def plotly_theme(dark=False):
         return dict(
             paper_bgcolor="rgba(0,0,0,0)",
             plot_bgcolor="rgba(0,0,0,0)",
-            font=dict(color="#e8ecf1"),
-            title_font=dict(color="#f6f8fb"),
-            legend=dict(font=dict(color="#e8ecf1"), bgcolor="rgba(0,0,0,0)"),
+            font=dict(color="#f3efe7"),
+            title_font=dict(color="#fff9f0"),
+            legend=dict(font=dict(color="#f3efe7"), bgcolor="rgba(0,0,0,0)"),
             xaxis=dict(gridcolor="rgba(167,176,188,0.18)", zerolinecolor="rgba(167,176,188,0.18)", linecolor="rgba(167,176,188,0.28)", tickfont=dict(color="#cbd5df"), title_font=dict(color="#cbd5df")),
             yaxis=dict(gridcolor="rgba(167,176,188,0.18)", zerolinecolor="rgba(167,176,188,0.18)", linecolor="rgba(167,176,188,0.28)", tickfont=dict(color="#cbd5df"), title_font=dict(color="#cbd5df")),
         )
     return dict(
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
-        font=dict(color="#20242b"),
-        title_font=dict(color="#0f1115"),
-        legend=dict(font=dict(color="#20242b"), bgcolor="rgba(0,0,0,0)"),
+        font=dict(color="#222222"),
+        title_font=dict(color="#fff9f0"),
+        legend=dict(font=dict(color="#222222"), bgcolor="rgba(0,0,0,0)"),
         xaxis=dict(gridcolor="rgba(95,103,115,0.14)", zerolinecolor="rgba(95,103,115,0.14)", linecolor="rgba(95,103,115,0.24)", tickfont=dict(color="#4b5563"), title_font=dict(color="#4b5563")),
         yaxis=dict(gridcolor="rgba(95,103,115,0.14)", zerolinecolor="rgba(95,103,115,0.14)", linecolor="rgba(95,103,115,0.24)", tickfont=dict(color="#4b5563"), title_font=dict(color="#4b5563")),
     )
 
 PLOTLY_LIGHT = plotly_theme(dark=False)
 PLOTLY_DARK = plotly_theme(dark=True)
-PLOTLY_ORANGE = "#f97316"
-PLOTLY_TEAL = "#0f9d94"
-PLOTLY_GRAY = "#64748b"
-PLOTLY_RED = "#ef4444"
+PLOTLY_ORANGE = "#ff7a2f"
+PLOTLY_TEAL = "#09f0ff"
+PLOTLY_GRAY = "#c8beb2"
+PLOTLY_RED = "#ff6b6b"
 
 # ── Helper functions ──────────────────────────────────────────────────────────
 
@@ -907,7 +907,7 @@ with tab4:
         fig_bench = px.scatter(
             schools, x="completion_rate", y="confidence_score",
             color="risk_tier", hover_name="school_name",
-            color_discrete_map={"Green": "#00b4b4", "Watch": "#f59e0b", "Alert": "#ef4444"},
+            color_discrete_map={"Green": "#00b4b4", "Watch": "#f59e0b", "Alert": "#ff6b6b"},
             labels={"completion_rate": "Completion Rate", "confidence_score": "Confidence Score", "risk_tier": "Tier"},
             height=350
         )
