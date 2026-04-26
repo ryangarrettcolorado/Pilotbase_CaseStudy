@@ -98,8 +98,20 @@ st.markdown("""
     color: var(--text);
 }
 
+[data-testid="stAppViewContainer"] > .main {
+    padding-top: 0.5rem;
+}
+
+header[data-testid="stHeader"] {
+    background: rgba(0, 0, 0, 0);
+}
+
+.portal-header {
+    margin-top: 0.5rem;
+}
+
 .block-container {
-    padding-top: 1.4rem;
+    padding-top: 4.75rem;
     padding-bottom: 2rem;
 }
 
