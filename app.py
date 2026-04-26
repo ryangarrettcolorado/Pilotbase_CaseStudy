@@ -37,94 +37,298 @@ st.set_page_config(page_title="TradeCraft Lender Portal", layout="wide")
 #     for dark mode so they remain legible
 st.markdown("""
 <style>
-/* ── Sidebar shell ─────────────────────────────── */
-[data-testid="stSidebar"] { background: #0f1c2e !important; }
+:root {
+    --bg: #f7f7f8;
+    --surface: #ffffff;
+    --surface-alt: #f2f4f5;
+    --surface-muted: #eceff1;
+    --text: #161616;
+    --text-strong: #0f1115;
+    --text-muted: #5f6773;
+    --border: #d7dce2;
+    --border-strong: #b9c2cc;
+    --shadow-sm: 0 1px 2px rgba(15, 17, 21, 0.06);
+    --shadow-md: 0 8px 24px rgba(15, 17, 21, 0.08);
+    --brand-black: #0d0f12;
+    --brand-gray: #20242b;
+    --brand-gray-2: #2b313a;
+    --brand-orange: #f97316;
+    --brand-orange-soft: #fff1e8;
+    --brand-teal: #0f9d94;
+    --brand-teal-soft: #e8f7f5;
+    --success-bg: #e8f7ef;
+    --success-text: #0f6a46;
+    --watch-bg: #fff3df;
+    --watch-text: #a85a00;
+    --alert-bg: #fdecec;
+    --alert-text: #a02828;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #0d0f12;
+        --surface: #171a1f;
+        --surface-alt: #1f242b;
+        --surface-muted: #252b34;
+        --text: #e8ecf1;
+        --text-strong: #f6f8fb;
+        --text-muted: #a7b0bc;
+        --border: #313844;
+        --border-strong: #485261;
+        --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.28);
+        --shadow-md: 0 14px 34px rgba(0, 0, 0, 0.32);
+        --brand-black: #050607;
+        --brand-gray: #171a1f;
+        --brand-gray-2: #252b34;
+        --brand-orange-soft: rgba(249, 115, 22, 0.14);
+        --brand-teal-soft: rgba(15, 157, 148, 0.14);
+        --success-bg: rgba(16, 185, 129, 0.16);
+        --success-text: #82e6ba;
+        --watch-bg: rgba(249, 115, 22, 0.18);
+        --watch-text: #ffbe7a;
+        --alert-bg: rgba(239, 68, 68, 0.16);
+        --alert-text: #ffb2b2;
+    }
+}
+
+.stApp {
+    background: var(--bg);
+    color: var(--text);
+}
+
+.block-container {
+    padding-top: 1.4rem;
+    padding-bottom: 2rem;
+}
+
+h1, h2, h3, h4, h5, h6,
+[data-testid="stMarkdownContainer"] h1,
+[data-testid="stMarkdownContainer"] h2,
+[data-testid="stMarkdownContainer"] h3 {
+    color: var(--text-strong) !important;
+}
+
+p, li, label, div, span {
+    color: var(--text);
+}
+
+[data-testid="stSidebar"] {
+    background: linear-gradient(180deg, #0d0f12 0%, #1a1e25 100%) !important;
+    border-right: 1px solid rgba(255,255,255,0.06);
+}
 [data-testid="stSidebar"] h1,
 [data-testid="stSidebar"] h2,
 [data-testid="stSidebar"] h3,
 [data-testid="stSidebar"] p,
 [data-testid="stSidebar"] span:not([data-baseweb]),
-[data-testid="stSidebar"] label { color: #cbd5e1 !important; }
-[data-testid="stSidebar"] .stSelectbox > label { color: #00b4b4 !important; font-weight: 600; }
-/* Selectbox input — keep native system colors so value is visible in both modes */
+[data-testid="stSidebar"] label {
+    color: #d5dde7 !important;
+}
+[data-testid="stSidebar"] .stSelectbox > label {
+    color: #7ce0d7 !important;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-size: 0.76rem;
+}
 [data-testid="stSidebar"] [data-baseweb="select"] > div {
-    background: #1e3050 !important;
-    border-color: #334d6e !important;
+    background: #232933 !important;
+    border: 1px solid #39414f !important;
+    border-radius: 12px !important;
+    min-height: 44px;
 }
 [data-testid="stSidebar"] [data-baseweb="select"] [data-testid="stMarkdownContainer"],
 [data-testid="stSidebar"] [data-baseweb="select"] span,
 [data-testid="stSidebar"] [data-baseweb="select"] div {
-    color: #f1f5f9 !important;
+    color: #f6f8fb !important;
 }
-/* ── Portal header ─────────────────────────────── */
+
 .portal-header {
-    background: #0f1c2e; padding: 14px 24px; border-radius: 8px;
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 18px;
+    background: linear-gradient(135deg, #0d0f12 0%, #1f242b 100%);
+    border: 1px solid rgba(255,255,255,0.06);
+    padding: 18px 24px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-md);
 }
-.portal-title { color: #ffffff; font-size: 20px; font-weight: 700; margin: 0; }
-.portal-tabs { color: #00b4b4; font-size: 14px; }
-/* ── KPI cards — adaptive ──────────────────────── */
+.portal-title {
+    color: #f8fafc;
+    font-size: 1.15rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin: 0;
+}
+.portal-tabs {
+    color: #8ee5dc;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
 .kpi-card {
-    background: var(--kpi-bg, #ffffff);
-    border: 1px solid var(--kpi-border, #e5e7eb);
-    border-radius: 8px; padding: 18px 20px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.08); text-align: center;
-    min-height: 110px; display: flex; flex-direction: column; justify-content: center;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 18px 20px;
+    box-shadow: var(--shadow-sm);
+    text-align: center;
+    min-height: 110px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
-.kpi-value { font-size: 36px; font-weight: 700; color: var(--kpi-val, #0f1c2e); line-height: 1.1; }
-.kpi-label { font-size: 13px; color: #6b7280; margin-top: 4px; }
-.kpi-delta { font-size: 12px; color: #00b4b4; font-weight: 600; }
-/* Light mode overrides */
-@media (prefers-color-scheme: light) {
-    :root { --kpi-bg: #ffffff; --kpi-border: #e5e7eb; --kpi-val: #0f1c2e; }
+.kpi-value {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--text-strong);
+    line-height: 1.05;
 }
-/* Dark mode overrides */
-@media (prefers-color-scheme: dark) {
-    :root { --kpi-bg: #1e293b; --kpi-border: #334155; --kpi-val: #f1f5f9; }
-    .kpi-label { color: #94a3b8; }
-    .section-header { color: #e2e8f0 !important; }
-    .action-row { background: #1e293b !important; border-left-color: #00b4b4; }
-    .action-row span, .action-row strong { color: #e2e8f0 !important; }
+.kpi-label {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin-top: 0.35rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
 }
-/* ── Pills — always high-contrast ─────────────── */
-.pill-green { background:#d1fae5; color:#065f46; border-radius:12px; padding:3px 12px; font-size:12px; font-weight:700; display:inline-block; }
-.pill-watch { background:#fef3c7; color:#92400e; border-radius:12px; padding:3px 12px; font-size:12px; font-weight:700; display:inline-block; }
-.pill-alert { background:#fee2e2; color:#991b1b; border-radius:12px; padding:3px 12px; font-size:12px; font-weight:700; display:inline-block; }
-/* ── Action queue ──────────────────────────────── */
-.action-queue-bar {
-    background: #0d9488; color: #ffffff; padding: 12px 18px;
-    border-radius: 8px; font-weight: 600; font-size: 14px; margin: 12px 0 6px 0;
+.kpi-delta {
+    font-size: 0.76rem;
+    color: var(--brand-teal);
+    font-weight: 700;
+    margin-top: 0.25rem;
 }
-.action-row {
-    background: #ffffff; border-radius: 6px; padding: 12px 16px;
-    margin-bottom: 8px; border-left: 4px solid #0f1c2e;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+
+.section-header {
+    color: var(--text-strong) !important;
+    font-size: 1.18rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin: 22px 0 12px 0;
 }
-/* ── Info boxes — adaptive ─────────────────────── */
-.section-header { color: #0f1c2e; font-size: 18px; font-weight: 700; margin: 20px 0 10px 0; }
+
+.pill-green, .pill-watch, .pill-alert {
+    border-radius: 999px;
+    padding: 4px 12px;
+    font-size: 12px;
+    font-weight: 700;
+    display: inline-block;
+    border: 1px solid transparent;
+}
+.pill-green { background: var(--success-bg); color: var(--success-text); }
+.pill-watch { background: var(--watch-bg); color: var(--watch-text); }
+.pill-alert { background: var(--alert-bg); color: var(--alert-text); }
+
+.ai-box, .warn-box, .alert-box {
+    padding: 14px 16px;
+    border-radius: 14px;
+    font-size: 14px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+}
 .ai-box {
-    background: #f0fdfa; border-left: 4px solid #00b4b4;
-    padding: 12px 16px; border-radius: 6px; font-size: 14px; color: #134e4a;
+    background: var(--brand-teal-soft);
+    border-left: 4px solid var(--brand-teal);
+    color: var(--text-strong);
 }
 .warn-box {
-    background: #fffbeb; border-left: 4px solid #f59e0b;
-    padding: 12px 16px; border-radius: 6px; font-size: 14px; color: #78350f;
+    background: var(--brand-orange-soft);
+    border-left: 4px solid var(--brand-orange);
+    color: var(--text-strong);
 }
 .alert-box {
-    background: #fef2f2; border-left: 4px solid #ef4444;
-    padding: 12px 16px; border-radius: 6px; font-size: 14px; color: #7f1d1d;
+    background: var(--alert-bg);
+    border-left: 4px solid #ef4444;
+    color: var(--text-strong);
 }
-@media (prefers-color-scheme: dark) {
-    .ai-box   { background: #0d2e2b; color: #6ee7de; }
-    .warn-box { background: #2d1f00; color: #fcd34d; }
-    .alert-box{ background: #2d0a0a; color: #fca5a5; }
+
+.action-queue-bar {
+    background: linear-gradient(90deg, var(--brand-gray) 0%, var(--brand-gray-2) 70%);
+    color: #f8fafc;
+    padding: 13px 18px;
+    border-radius: 14px;
+    font-weight: 700;
+    font-size: 14px;
+    margin: 12px 0 10px 0;
+    border: 1px solid rgba(255,255,255,0.06);
 }
-/* ── Tabs ──────────────────────────────────────── */
-.stTabs [data-baseweb="tab-list"] { gap: 4px; background: #0f1c2e; padding: 6px 8px; border-radius: 8px; }
-.stTabs [data-baseweb="tab"] { color: #94a3b8 !important; background: transparent; border-radius: 6px; padding: 6px 16px; font-size: 14px; }
-.stTabs [aria-selected="true"] { background: #00b4b4 !important; color: #ffffff !important; }
+.action-row {
+    background: var(--surface);
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--brand-orange);
+    box-shadow: var(--shadow-sm);
+}
+.action-row .meta-muted { color: var(--text-muted) !important; font-size: 13px; }
+.action-row .trigger-line { color: var(--text) !important; font-size: 13px; }
+.action-row .recommend-line { color: var(--text-strong) !important; font-size: 13px; font-weight: 600; }
+.action-row .confidence-line { color: var(--brand-teal) !important; font-size: 12px; font-weight: 700; }
+
+.stTabs [data-baseweb="tab-list"] {
+    gap: 6px;
+    background: var(--brand-black);
+    padding: 7px 8px;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.06);
+}
+.stTabs [data-baseweb="tab"] {
+    color: #9aa5b1 !important;
+    background: transparent;
+    border-radius: 10px;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 600;
+}
+.stTabs [aria-selected="true"] {
+    background: linear-gradient(90deg, var(--brand-orange) 0%, var(--brand-teal) 100%) !important;
+    color: #ffffff !important;
+}
+
+[data-testid="stDataFrame"], [data-testid="stTable"] {
+    border-radius: 14px;
+    overflow: hidden;
+}
+[data-testid="stDataFrame"] div[role="grid"] {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--surface) !important;
+}
+
+[data-testid="stMetric"] {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 12px 14px;
+    box-shadow: var(--shadow-sm);
+}
+[data-testid="stMetricLabel"] {
+    color: var(--text-muted) !important;
+}
+[data-testid="stMetricValue"] {
+    color: var(--text-strong) !important;
+    font-weight: 800;
+}
+
+.stButton > button {
+    border-radius: 12px;
+    border: 1px solid var(--border-strong);
+    background: var(--surface);
+    color: var(--text-strong);
+    font-weight: 700;
+    min-height: 40px;
+}
+.stButton > button:hover {
+    border-color: var(--brand-teal);
+    color: var(--brand-teal);
+}
+
+div[data-baseweb="select"] > div {
+    border-radius: 12px !important;
+}
 </style>
+""", unsafe_allow_html=True)
 """, unsafe_allow_html=True)
 
 # ── Data loading ──────────────────────────────────────────────────────────────
@@ -569,7 +773,7 @@ with tab2:
 
     st.dataframe(
         funnel_df.style
-            .map(color_rate, subset=["Enroll→Active", "Active→Cert"])
+            .map(color_tier_col, subset=["Tier"]).map(color_rate, subset=["Enroll→Active", "Active→Cert"])
             .format({"Enroll→Active": "{:.0%}", "Active→Cert": "{:.0%}"}),
         use_container_width=True, hide_index=True
     )
@@ -583,7 +787,7 @@ with tab2:
 # =============================================================================
 with tab3:
     st.markdown('<div class="section-header">Early Warning Monitor</div>', unsafe_allow_html=True)
-    st.markdown("Flags that changed since last review. Act today or explain why you didn't.")
+    st.markdown("Flags that changed since last review.")
 
     # Identify the three categories of concern
     silent       = schools[schools["freshness_days"] >= 21].copy()                    # Schools that have gone quiet
@@ -699,7 +903,7 @@ with tab4:
         fig_bench.add_hline(y=median_confidence, line_dash="dash", line_color="#94a3b8",
                             annotation_text="Median Confidence", annotation_position="top right")
         fig_bench.update_traces(marker=dict(size=11))
-        fig_bench.update_layout(margin=dict(t=20, b=20), paper_bgcolor="#f5f7fa", plot_bgcolor="#f5f7fa")
+        fig_bench.update_layout(margin=dict(t=20, b=20), paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)", font=dict(color="#e8ecf1"))
         st.plotly_chart(fig_bench, use_container_width=True)
     except Exception as e:
         st.warning(f"⚠️ Could not render benchmark chart: {e}")
@@ -740,10 +944,10 @@ with tab5:
 <div class="action-row">
   <strong>{r['school_name']}</strong>
   &nbsp;<span style="color:{tier_color};font-weight:700">{r['risk_tier']}</span>
-  &nbsp;·&nbsp; <span style="color:#6b7280;font-size:13px">{freshness_label(r['freshness_days'])} since update · {int(r['open_issues']) if r['open_issues']==r['open_issues'] else 0} open issues</span><br>
-  <span style="font-size:13px;color:#374151">📌 Trigger: {r['action_trigger']}</span><br>
-  <span style="font-size:13px;color:#0f1c2e">→ {r['action_recommendation']}</span>
-  &nbsp;<span style="font-size:12px;color:#00b4b4">AI confidence: {safe_pct(r['action_confidence'])}</span>
+  &nbsp;·&nbsp; <span class="meta-muted">{freshness_label(r['freshness_days'])} since update · {int(r['open_issues']) if r['open_issues']==r['open_issues'] else 0} open issues</span><br>
+  <span class="trigger-line">📌 Trigger: {r['action_trigger']}</span><br>
+  <span class="recommend-line">→ {r['action_recommendation']}</span>
+  &nbsp;<span class="confidence-line">AI confidence: {safe_pct(r['action_confidence'])}</span>
 </div>
 """, unsafe_allow_html=True)
                     acol1, acol2 = st.columns([1, 5])
