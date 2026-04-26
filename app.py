@@ -329,7 +329,6 @@ div[data-baseweb="select"] > div {
 }
 </style>
 """, unsafe_allow_html=True)
-""", unsafe_allow_html=True)
 
 # ── Data loading ──────────────────────────────────────────────────────────────
 # Loads both CSV files once and caches the result so the app doesn't re-read
@@ -363,14 +362,37 @@ def load_data():
 
 schools, candidates = load_data()
 
+def plotly_theme(dark=False):
+    if dark:
+        return dict(
+            paper_bgcolor="rgba(0,0,0,0)",
+            plot_bgcolor="rgba(0,0,0,0)",
+            font=dict(color="#e8ecf1"),
+            title_font=dict(color="#f6f8fb"),
+            legend=dict(font=dict(color="#e8ecf1"), bgcolor="rgba(0,0,0,0)"),
+            xaxis=dict(gridcolor="rgba(167,176,188,0.18)", zerolinecolor="rgba(167,176,188,0.18)", linecolor="rgba(167,176,188,0.28)", tickfont=dict(color="#cbd5df"), title_font=dict(color="#cbd5df")),
+            yaxis=dict(gridcolor="rgba(167,176,188,0.18)", zerolinecolor="rgba(167,176,188,0.18)", linecolor="rgba(167,176,188,0.28)", tickfont=dict(color="#cbd5df"), title_font=dict(color="#cbd5df")),
+        )
+    return dict(
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        font=dict(color="#20242b"),
+        title_font=dict(color="#0f1115"),
+        legend=dict(font=dict(color="#20242b"), bgcolor="rgba(0,0,0,0)"),
+        xaxis=dict(gridcolor="rgba(95,103,115,0.14)", zerolinecolor="rgba(95,103,115,0.14)", linecolor="rgba(95,103,115,0.24)", tickfont=dict(color="#4b5563"), title_font=dict(color="#4b5563")),
+        yaxis=dict(gridcolor="rgba(95,103,115,0.14)", zerolinecolor="rgba(95,103,115,0.14)", linecolor="rgba(95,103,115,0.24)", tickfont=dict(color="#4b5563"), title_font=dict(color="#4b5563")),
+    )
+
+PLOTLY_LIGHT = plotly_theme(dark=False)
+PLOTLY_DARK = plotly_theme(dark=True)
+PLOTLY_ORANGE = "#f97316"
+PLOTLY_TEAL = "#0f9d94"
+PLOTLY_GRAY = "#64748b"
+PLOTLY_RED = "#ef4444"
+
 # ── Helper functions ──────────────────────────────────────────────────────────
 
 def freshness_label(days):
-    """
-    Converts a raw number of days into a human-readable label.
-    Example: 0 → "today", 1 → "1 day", 14 → "14 days".
-    Handles missing or non-numeric values gracefully.
-    """
     try:
         days = float(days)
     except (ValueError, TypeError):
@@ -380,11 +402,6 @@ def freshness_label(days):
     return f"{int(days)} days"
 
 def safe_pct(val, fallback="—"):
-    """
-    Safely formats a decimal value (e.g. 0.74) as a percentage (e.g. "74%").
-    Returns a dash if the value is missing, not a number, or unreadable.
-    This prevents raw "nan%" from appearing anywhere in the UI.
-    """
     try:
         v = float(val)
         if v != v: return fallback  # Catches NaN (not-a-number) values
@@ -393,10 +410,6 @@ def safe_pct(val, fallback="—"):
         return fallback
 
 def tier_pill(tier):
-    """
-    Returns a color-coded HTML badge for a risk tier label.
-    Green = low risk, Watch = caution, Alert = high risk / action required.
-    """
     if tier == "Green": return '<span class="pill-green">Green</span>'
     if tier == "Watch": return '<span class="pill-watch">Watch</span>'
     return '<span class="pill-alert">Alert</span>'
@@ -737,7 +750,7 @@ with tab2:
         marker=dict(color=["#0f1c2e", "#0d9488", "#00b4b4"])   # Brand colors
     ))
     fig_funnel.update_layout(margin=dict(t=20, b=20), height=320, paper_bgcolor="#f5f7fa")
-    st.plotly_chart(fig_funnel, use_container_width=True)
+    st.plotly_chart(fig_funnel, use_container_width=True, theme=None)
 
     # Calculate drop-off rates between each stage
     drop1 = frow["enrolled"] - frow["active_milestones"]   # Students who never hit a milestone
@@ -903,8 +916,8 @@ with tab4:
         fig_bench.add_hline(y=median_confidence, line_dash="dash", line_color="#94a3b8",
                             annotation_text="Median Confidence", annotation_position="top right")
         fig_bench.update_traces(marker=dict(size=11))
-        fig_bench.update_layout(margin=dict(t=20, b=20), paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)", font=dict(color="#e8ecf1"))
-        st.plotly_chart(fig_bench, use_container_width=True)
+        fig_bench.update_layout(margin=dict(t=20, b=20), **PLOTLY_DARK)
+        st.plotly_chart(fig_bench, use_container_width=True, theme=None)
     except Exception as e:
         st.warning(f"⚠️ Could not render benchmark chart: {e}")
 
